@@ -116,6 +116,42 @@ body {
   );
 }
 
+.btnShade {
+  background-image: linear-gradient(
+    to top left, #494949, #515151
+  );
+}
+
+.btnShade:active {
+  background-image: linear-gradient(
+    to top left, #575757, #494949
+  );
+}
+
+.btnShade2 {
+  background-image: linear-gradient(
+    to top left, #474747, #494949
+  );
+}
+
+.btnShade2:active {
+  background-image: linear-gradient(
+    to top left, #555555, #474747
+  );
+}
+
+.btnShade3 {
+  background-image: linear-gradient(
+    to top left, #454545, #474747
+  );
+}
+
+.btnShade3:active {
+  background-image: linear-gradient(
+    to top left, #535353, #454545
+  );
+}
+
 .cells {
   margin-top: 18px;
   border: #616151 2px solid;
