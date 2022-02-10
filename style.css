@@ -25,12 +25,15 @@ body {
   background-color: #ffe4c4;
   background-image: linear-gradient(
     to top left,
-    #ffe4c4, #fcebd6
+    #ffe3c3, #fcebd6
   );
   padding: 10px;
-  border: #515151 5px solid;
+  border-top: #ffe1b1 6px solid;
+  border-left: #ffe1b1 6px solid;
+  border-bottom: #ffd5a5 7px solid;
+  border-right: #ffd5a5 7px solid;
   border-radius: 10px;
-  box-shadow: 8px 10px 20px;
+  box-shadow: 8px 12px 20px;
 }
 
 .logo-img {
@@ -51,7 +54,10 @@ body {
   font-style: normal;
   height: 100px;
   padding: 10px;
-  border: #515151 5px solid;
+  border-bottom: #ffe1b1 6px solid;
+  border-right: #ffe1b1 6px solid;
+  border-top: #ffd5a5 7px solid;
+  border-left: #ffd5a5 7px solid;
   border-radius: 5px;
   margin-bottom: 10px;
   background-color: #616151;
@@ -94,7 +100,7 @@ body {
     to top left, #595959, #515151
   );
   font-size: 29px;
-  text-shadow: 1px 1px 3px #1f1f1f;
+  text-shadow: 1px 1px 4px #1f1f1f;
   color: rgb(230,230,230);
 }
 .acbtn {
