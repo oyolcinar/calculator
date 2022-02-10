@@ -19,6 +19,7 @@ body {
 }
 
 .frame{
+  margin-top: 80px;
   transform: perspective(50em) rotateX(3deg);
   width: min-content;
   background-color: #ffe4c4;
@@ -29,13 +30,14 @@ body {
   padding: 10px;
   border: #515151 5px solid;
   border-radius: 10px;
-  box-shadow: 3px 3px 9px;
+  box-shadow: 8px 10px 20px;
 }
 
 .logo-img {
   width: 80px;
   margin-bottom: 5px;
   margin-left: 3px;
+  transform: perspective(50em) rotateX(3deg);
 }
 
 .display {
@@ -56,7 +58,8 @@ body {
   background-image: linear-gradient(
     to top left, #616151, #515141
   );
-  box-shadow: 3px 3px 3px inset;
+  box-shadow: 3px 3px 12px inset;
+  transform: perspective(50em) rotateX(3deg);
 }
 
 .wrapper {
@@ -79,11 +82,11 @@ body {
     to top left, #515151, #595959
   );
   margin: 5px;
-  text-shadow: 1px 1px #1f1f1f;
+  text-shadow: 1px 1px 2px #1f1f1f;
 }
 
 .button:before {
-  box-shadow: 2px 2px 1px #1f1f1f;
+  box-shadow: 3px 3px 12px #1f1f1f;
 }
 
 .button:active {
@@ -91,6 +94,8 @@ body {
     to top left, #595959, #515151
   );
   font-size: 29px;
+  text-shadow: 1px 1px 3px #1f1f1f;
+  color: rgb(230,230,230);
 }
 .acbtn {
   background-color: #ff8300;
