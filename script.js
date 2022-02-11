@@ -1,66 +1,112 @@
+/* Variables */
+
+let firstNumber = "";
+let secondNumber = "";
+let lastOperation = "";
+let load = false;
+
 /* Selectors */
 
-const zero = document.getElementById("zeroBtn");
-const one = document.getElementById("oneBtn");
-const two = document.getElementById("twoBtn");
-const three = document.getElementById("threeBtn");
-const four = document.getElementById("fourBtn");
-const five = document.getElementById("fiveBtn");
-const six = document.getElementById("sixBtn");
-const seven = document.getElementById("sevenBtn");
-const eight = document.getElementById("eightBtn");
-const nine = document.getElementById("nineBtn");
-const addBtn = document.getElementById("addBtn");
-const subtractBtn = document.getElementById("subtractBtn");
-const multiplyBtn = document.getElementById("multiplyBtn");
-const divideBtn = document.getElementById("divideBtn");
-const point = document.getElementById("pointBtn");
+const pointBtn = document.getElementById("pointBtn");
 const equals = document.getElementById("equalsBtn");
 const cancel = document.getElementById("cBtn");
-const reset = document.getElementById("acBtn");
+const acReset = document.getElementById("acBtn");
 const display = document.getElementById("display");
 
 /* Basic Operator Functions */
 
 function add(x, y) {
-  display.innerText = x + y;
+  firstNumber = x + y;
+  display.innerText = firstNumber;
 }
 
 function subtract(x, y) {
-  display.innerText = x - y;
+  firstNumber = x - y;
+  display.innerText = firstNumber;
 }
 
 function multiply(x, y) {
-  display.innerText = x * y;
+  firstNumber = x * y;
+  display.innerText = firstNumber;
 }
 
 function divide(x, y) {
-  display.innerText = x / y;
+  firstNumber = x / y;
+  display.innerText = firstNumber;
 }
 
-/* Display */
+function operate() {
+  if (!lastOperation || !secondNumber || !firstNumber) {
+    return;
+  } else {
+    if (lastOperation === "+") {
+      add(parseFloat(firstNumber), parseFloat(secondNumber));
+      load = false;
+      secondNumber = "";
+    } else if (lastOperation === "-") {
+      subtract(parseFloat(firstNumber), parseFloat(secondNumber));
+      load = false;
+      secondNumber = "";
+    } else if (lastOperation === "*") {
+      multiply(parseFloat(firstNumber), parseFloat(secondNumber));
+      load = false;
+      secondNumber = "";
+    } else if (lastOperation === "/") {
+      divide(parseFloat(firstNumber), parseFloat(secondNumber));
+      load = false;
+      secondNumber = "";
+    }
+  }
+}
 
-let displayValue = "";
-let displayValue2 = "";
-let noDisplay1 = false;
-let noDisplay2 = false;
-let lastOperation = "";
+function reset() {
+  firstNumber = "";
+  secondNumber = "";
+  lastOperation = "";
+  load = false;
+  display.innerText = 0;
+}
+
+function removeLast() {
+  if ((display.innerText = firstNumber)) {
+    firstNumber = firstNumber.toString().slice(0, -1);
+    firstNumber = parseFloat(firstNumber);
+    display.innerText = firstNumber;
+  } else if ((display.innerText = secondNumber)) {
+    secondNumber = secondNumber.toString().slice(0, -1);
+    secondNumber = parseFloat(secondNumber);
+    display.innerText = secondNumber;
+  }
+}
+
+function decimal() {
+  if ((display.innerText = firstNumber)) {
+    firstNumber += ".";
+    display.innerText = firstNumber;
+  } else if ((display.innerText = secondNumber)) {
+    secondNumber += ".";
+    display.innerText = secondNumber;
+  }
+}
 
 /* Event Listeners */
 
 const numberBtns = document.getElementsByClassName("nums");
 for (let i = 0; i < numberBtns.length; i++) {
   numberBtns[i].addEventListener("click", (e) => {
-    if (displayValue === 0) {
-      displayValue = "";
-      displayValue += e.target.value;
-      display.innerText = displayValue;
-    } else if (displayValue.length < 9) {
-      displayValue += e.target.value;
-      display.innerText = displayValue;
-    } else if (noDisplay2 && displayValue2.length < 9) {
-      displayValue2 += e.target.value;
-      display.innerText = displayValue2;
+    if (firstNumber === 0) {
+      firstNumber = "";
+      firstNumber += e.target.value;
+      display.innerText = firstNumber;
+    } else if (!load && firstNumber.length < 9) {
+      firstNumber += e.target.value;
+      display.innerText = firstNumber;
+    } else if (load && secondNumber.length < 9) {
+      secondNumber += e.target.value;
+      display.innerText = secondNumber;
+    } else {
+      secondNumber += e.target.value;
+      display.innerText = secondNumber;
     }
   });
 }
@@ -68,18 +114,22 @@ for (let i = 0; i < numberBtns.length; i++) {
 const operatorBtns = document.getElementsByClassName("operatorBtns");
 for (let i = 0; i < operatorBtns.length; i++) {
   operatorBtns[i].addEventListener("click", (e) => {
-    if (displayValue2 === "") {
-      noDisplay2 = true;
-      lastOperation += e.target.value;
-    } else if (e.target.value === "+") {
-      add(displayValue, displayValue2);
-    } else if (e.target.value === "-") {
-      subtract(displayValue, displayValue2);
-    } else if (e.target.value === "*") {
-      multiply(displayValue, displayValue2);
-    } else if (e.target.value === "/") {
-      divide(displayValue, displayValue2);
+    if (firstNumber === "" && secondNumber === "") {
+      return;
+    } else if (secondNumber === "") {
+      lastOperation = e.target.value;
+      load = true;
+    } else if (lastOperation) {
+      operate();
+      lastOperation = e.target.value;
     }
   });
 }
-function operate() {}
+
+equals.addEventListener("click", operate);
+
+pointBtn.addEventListener("click", decimal);
+
+acReset.addEventListener("click", reset);
+
+cancel.addEventListener("click", removeLast);
