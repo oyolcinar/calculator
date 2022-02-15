@@ -6,6 +6,8 @@ let lastOperation = "";
 let load = false;
 let disableDecimal1 = false;
 let disableDecimal2 = false;
+let songOn = false;
+let song = new Audio("./sounds/blackholesun8bit.mp3");
 
 /* Selectors */
 
@@ -33,11 +35,20 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
-  firstNumber = x / y;
-  display.innerText = firstNumber;
+  if (y === 0) {
+    display.innerText = "BLACK HOLE SUN";
+    blackHoleSun();
+  } else {
+    firstNumber = x / y;
+    display.innerText = firstNumber;
+  }
 }
 
+/* Not So Basic Operator Functions */
+
 function operate() {
+  pauseBlackHoleSun();
+  playSound();
   if (!lastOperation || !secondNumber || !firstNumber) {
     return;
   } else {
@@ -66,6 +77,8 @@ function operate() {
 }
 
 function reset() {
+  pauseBlackHoleSun();
+  playSound();
   firstNumber = "";
   secondNumber = "";
   lastOperation = "";
@@ -76,6 +89,8 @@ function reset() {
 }
 
 function removeLast() {
+  pauseBlackHoleSun();
+  playSound();
   if (!load) {
     firstNumber = firstNumber.toString().slice(0, -1);
     firstNumber === "" || firstNumber === "-"
@@ -90,6 +105,8 @@ function removeLast() {
 }
 
 function decimal() {
+  pauseBlackHoleSun();
+  playSound();
   if (!load && !disableDecimal1 && firstNumber) {
     disableDecimal1 = true;
     firstNumber += ".";
@@ -129,11 +146,35 @@ function decimal() {
   }
 }
 
+/* Sound Functions */
+
+function playSound() {
+  let sound = new Audio("./sounds/buttonpress.mp3");
+  sound.play();
+}
+
+function blackHoleSun() {
+  if (!songOn) {
+    songOn = true;
+    song.play();
+  }
+}
+
+function pauseBlackHoleSun() {
+  if (songOn) {
+    songOn = false;
+    song.pause();
+    song.currentTime = 0;
+  }
+}
+
 /* Event Listeners */
 
 const numberBtns = document.getElementsByClassName("nums");
 for (let i = 0; i < numberBtns.length; i++) {
   numberBtns[i].addEventListener("click", (e) => {
+    pauseBlackHoleSun();
+    playSound();
     if (!load && firstNumber.length < 10) {
       firstNumber += e.target.value;
       display.innerText = firstNumber;
@@ -150,6 +191,8 @@ for (let i = 0; i < numberBtns.length; i++) {
 const operatorBtns = document.getElementsByClassName("operatorBtns");
 for (let i = 0; i < operatorBtns.length; i++) {
   operatorBtns[i].addEventListener("click", (e) => {
+    pauseBlackHoleSun();
+    playSound();
     if (firstNumber === "" && secondNumber === "") {
       return;
     } else if (secondNumber === "") {
