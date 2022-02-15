@@ -126,6 +126,7 @@ function removeLast() {
       display.innerText = 0;
       firstNumber = "";
     } else {
+      firstNumber = firstNumber.slice(0, 10);
       display.innerText = firstNumber;
     }
   } else if (load) {
@@ -135,6 +136,7 @@ function removeLast() {
       display.innerText = 0;
       secondNumber = "";
     } else {
+      secondNumber = secondNumber.slice(0, 10);
       display.innerText = secondNumber;
     }
   }
