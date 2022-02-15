@@ -4,6 +4,8 @@ let firstNumber = "";
 let secondNumber = "";
 let lastOperation = "";
 let load = false;
+let disableDecimal1 = false;
+let disableDecimal2 = false;
 
 /* Selectors */
 
@@ -64,26 +66,32 @@ function reset() {
   secondNumber = "";
   lastOperation = "";
   load = false;
+  disableDecimal1 = false;
+  disableDecimal2 = false;
   display.innerText = 0;
 }
 
 function removeLast() {
-  if ((display.innerText = firstNumber)) {
+  if (!load) {
     firstNumber = firstNumber.toString().slice(0, -1);
-    firstNumber = parseFloat(firstNumber);
-    display.innerText = firstNumber;
-  } else if ((display.innerText = secondNumber)) {
+    firstNumber === ""
+      ? (display.innerText = 0)
+      : (display.innerText = firstNumber);
+  } else if (load) {
     secondNumber = secondNumber.toString().slice(0, -1);
-    secondNumber = parseFloat(secondNumber);
-    display.innerText = secondNumber;
+    secondNumber === ""
+      ? (display.innerText = 0)
+      : (display.innerText = secondNumber);
   }
 }
 
 function decimal() {
-  if ((display.innerText = firstNumber)) {
+  if (!load && !disableDecimal1) {
+    disableDecimal1 = true;
     firstNumber += ".";
     display.innerText = firstNumber;
-  } else if ((display.innerText = secondNumber)) {
+  } else if (load && !disableDecimal2) {
+    disableDecimal2 = true;
     secondNumber += ".";
     display.innerText = secondNumber;
   }
