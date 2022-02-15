@@ -21,17 +21,38 @@ const display = document.getElementById("display");
 
 function add(x, y) {
   firstNumber = x + y;
-  display.innerText = firstNumber;
+  firstNumber = firstNumber.toString();
+  let answer = firstNumber.slice(0, 10);
+  if (firstNumber.length >= 10) {
+    let remainingDigits = firstNumber.toString().length - answer.length + 3;
+    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+  } else {
+    display.innerText = answer;
+  }
 }
 
 function subtract(x, y) {
   firstNumber = x - y;
-  display.innerText = firstNumber;
+  firstNumber = firstNumber.toString();
+  let answer = firstNumber.slice(0, 10);
+  if (firstNumber.length >= 10) {
+    let remainingDigits = firstNumber.toString().length - answer.length + 3;
+    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+  } else {
+    display.innerText = answer;
+  }
 }
 
 function multiply(x, y) {
   firstNumber = x * y;
-  display.innerText = firstNumber;
+  firstNumber = firstNumber.toString();
+  let answer = firstNumber.slice(0, 10);
+  if (firstNumber.length >= 10) {
+    let remainingDigits = firstNumber.toString().length - answer.length + 3;
+    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+  } else {
+    display.innerText = answer;
+  }
 }
 
 function divide(x, y) {
@@ -40,7 +61,14 @@ function divide(x, y) {
     blackHoleSun();
   } else {
     firstNumber = x / y;
-    display.innerText = firstNumber;
+    firstNumber = firstNumber.toString();
+    let answer = firstNumber.slice(0, 10);
+    if (firstNumber.length >= 10) {
+      let remainingDigits = firstNumber.toString().length - answer.length + 3;
+      display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+    } else {
+      display.innerText = answer;
+    }
   }
 }
 
@@ -93,14 +121,22 @@ function removeLast() {
   playSound();
   if (!load) {
     firstNumber = firstNumber.toString().slice(0, -1);
-    firstNumber === "" || firstNumber === "-"
-      ? (display.innerText = 0)
-      : (display.innerText = firstNumber);
+    if (firstNumber === "" || firstNumber === "-") {
+      disableDecimal1 = false;
+      display.innerText = 0;
+      firstNumber = "";
+    } else {
+      display.innerText = firstNumber;
+    }
   } else if (load) {
     secondNumber = secondNumber.toString().slice(0, -1);
-    secondNumber === "" || secondNumber === "-"
-      ? (display.innerText = 0)
-      : (display.innerText = secondNumber);
+    if (secondNumber === "" || secondNumber === "-") {
+      disableDecimal2 = false;
+      display.innerText = 0;
+      secondNumber = "";
+    } else {
+      display.innerText = secondNumber;
+    }
   }
 }
 
