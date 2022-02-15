@@ -43,18 +43,22 @@ function operate() {
   } else {
     if (lastOperation === "+") {
       add(parseFloat(firstNumber), parseFloat(secondNumber));
+      disableDecimal2 = false;
       load = false;
       secondNumber = "";
     } else if (lastOperation === "-") {
       subtract(parseFloat(firstNumber), parseFloat(secondNumber));
+      disableDecimal2 = false;
       load = false;
       secondNumber = "";
     } else if (lastOperation === "*") {
       multiply(parseFloat(firstNumber), parseFloat(secondNumber));
+      disableDecimal2 = false;
       load = false;
       secondNumber = "";
     } else if (lastOperation === "/") {
       divide(parseFloat(firstNumber), parseFloat(secondNumber));
+      disableDecimal2 = false;
       load = false;
       secondNumber = "";
     }
@@ -74,23 +78,51 @@ function reset() {
 function removeLast() {
   if (!load) {
     firstNumber = firstNumber.toString().slice(0, -1);
-    firstNumber === ""
+    firstNumber === "" || firstNumber === "-"
       ? (display.innerText = 0)
       : (display.innerText = firstNumber);
   } else if (load) {
     secondNumber = secondNumber.toString().slice(0, -1);
-    secondNumber === ""
+    secondNumber === "" || secondNumber === "-"
       ? (display.innerText = 0)
       : (display.innerText = secondNumber);
   }
 }
 
 function decimal() {
-  if (!load && !disableDecimal1) {
+  if (!load && !disableDecimal1 && firstNumber) {
     disableDecimal1 = true;
     firstNumber += ".";
     display.innerText = firstNumber;
-  } else if (load && !disableDecimal2) {
+  } else if (load && !disableDecimal2 && secondNumber) {
+    disableDecimal2 = true;
+    secondNumber += ".";
+    display.innerText = secondNumber;
+  } else if (!load && !disableDecimal1 && !firstNumber) {
+    disableDecimal1 = true;
+    firstNumber += "0.";
+    display.innerText = firstNumber;
+  } else if (load && !disableDecimal2 && !secondNumber) {
+    disableDecimal2 = true;
+    secondNumber += "0.";
+    display.innerText = secondNumber;
+  } else if (
+    !load &&
+    disableDecimal1 &&
+    firstNumber &&
+    !secondNumber &&
+    !disableDecimal2
+  ) {
+    disableDecimal2 = true;
+    secondNumber += "0.";
+    display.innerText = secondNumber;
+  } else if (
+    !load &&
+    disableDecimal1 &&
+    firstNumber &&
+    secondNumber &&
+    !disableDecimal2
+  ) {
     disableDecimal2 = true;
     secondNumber += ".";
     display.innerText = secondNumber;
@@ -102,17 +134,13 @@ function decimal() {
 const numberBtns = document.getElementsByClassName("nums");
 for (let i = 0; i < numberBtns.length; i++) {
   numberBtns[i].addEventListener("click", (e) => {
-    if (firstNumber === 0) {
-      firstNumber = "";
+    if (!load && firstNumber.length < 10) {
       firstNumber += e.target.value;
       display.innerText = firstNumber;
-    } else if (!load && firstNumber.length < 9) {
-      firstNumber += e.target.value;
-      display.innerText = firstNumber;
-    } else if (load && secondNumber.length < 9) {
+    } else if (load && secondNumber.length < 10) {
       secondNumber += e.target.value;
       display.innerText = secondNumber;
-    } else {
+    } else if (lastOperation && secondNumber.length < 10) {
       secondNumber += e.target.value;
       display.innerText = secondNumber;
     }
