@@ -25,7 +25,7 @@ function add(x, y) {
   let answer = firstNumber.slice(0, 10);
   if (firstNumber.length >= 10) {
     let remainingDigits = firstNumber.toString().length - answer.length + 3;
-    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+    display.innerText = `${answer.slice(0, 7)} e${remainingDigits}`;
   } else {
     display.innerText = answer;
   }
@@ -37,7 +37,7 @@ function subtract(x, y) {
   let answer = firstNumber.slice(0, 10);
   if (firstNumber.length >= 10) {
     let remainingDigits = firstNumber.toString().length - answer.length + 3;
-    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+    display.innerText = `${answer.slice(0, 7)} e${remainingDigits}`;
   } else {
     display.innerText = answer;
   }
@@ -49,7 +49,7 @@ function multiply(x, y) {
   let answer = firstNumber.slice(0, 10);
   if (firstNumber.length >= 10) {
     let remainingDigits = firstNumber.toString().length - answer.length + 3;
-    display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+    display.innerText = `${answer.slice(0, 7)} e${remainingDigits}`;
   } else {
     display.innerText = answer;
   }
@@ -65,7 +65,7 @@ function divide(x, y) {
     let answer = firstNumber.slice(0, 10);
     if (firstNumber.length >= 10) {
       let remainingDigits = firstNumber.toString().length - answer.length + 3;
-      display.innerText = `${answer.slice(0, 7)}e${remainingDigits}`;
+      display.innerText = `${answer.slice(0, 7)} e${remainingDigits}`;
     } else {
       display.innerText = answer;
     }
@@ -145,43 +145,63 @@ function removeLast() {
 function decimal() {
   pauseBlackHoleSun();
   playSound();
-  if (!load && !disableDecimal1 && firstNumber) {
-    disableDecimal1 = true;
+  if (!firstNumber.includes(".") && firstNumber && !lastOperation) {
     firstNumber += ".";
     display.innerText = firstNumber;
-  } else if (load && !disableDecimal2 && secondNumber) {
-    disableDecimal2 = true;
-    secondNumber += ".";
-    display.innerText = secondNumber;
-  } else if (!load && !disableDecimal1 && !firstNumber) {
-    disableDecimal1 = true;
+  }
+  if (!firstNumber.includes(".") && !firstNumber && !lastOperation) {
     firstNumber += "0.";
     display.innerText = firstNumber;
-  } else if (load && !disableDecimal2 && !secondNumber) {
-    disableDecimal2 = true;
-    secondNumber += "0.";
-    display.innerText = secondNumber;
-  } else if (
-    !load &&
-    disableDecimal1 &&
-    firstNumber &&
-    !secondNumber &&
-    !disableDecimal2
-  ) {
-    disableDecimal2 = true;
-    secondNumber += "0.";
-    display.innerText = secondNumber;
-  } else if (
-    !load &&
-    disableDecimal1 &&
-    firstNumber &&
-    secondNumber &&
-    !disableDecimal2
-  ) {
-    disableDecimal2 = true;
+  }
+  if (!secondNumber.includes(".") && secondNumber && lastOperation) {
     secondNumber += ".";
     display.innerText = secondNumber;
   }
+  if (!secondNumber.includes(".") && !secondNumber && lastOperation) {
+    secondNumber += "0.";
+    display.innerText = secondNumber;
+  }
+}
+
+function numbers(number) {
+  pauseBlackHoleSun();
+  playSound();
+  if (!lastOperation && firstNumber.length < 10) {
+    if (display.innerText === "0" && number === "0") return;
+    firstNumber += number;
+    display.innerText = firstNumber;
+  }
+  if (lastOperation && secondNumber.length < 10) {
+    if (display.innerText === "0" && number === "0") return;
+    secondNumber += number;
+    display.innerText = secondNumber;
+  }
+}
+
+function setOperation(operation) {
+  pauseBlackHoleSun();
+  playSound();
+  if (firstNumber === "" && secondNumber === "") {
+    return;
+  } else if (secondNumber === "") {
+    lastOperation = operation;
+    load = true;
+  } else if (lastOperation) {
+    operate();
+    lastOperation = operation;
+  }
+}
+
+/* Key Event Handler */
+
+function handleKeyboardInput(e) {
+  if (e.key >= 0 && e.key <= 9) numbers(e.key);
+  if (e.key === ".") decimal();
+  if (e.key === "=" || e.key === "Enter") operate();
+  if (e.key === "Backspace") removeLast();
+  if (e.key === "Escape") reset();
+  if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/")
+    setOperation(e.key);
 }
 
 /* Sound Functions */
@@ -208,38 +228,19 @@ function pauseBlackHoleSun() {
 
 /* Event Listeners */
 
+window.addEventListener("keydown", handleKeyboardInput);
+
 const numberBtns = document.getElementsByClassName("nums");
 for (let i = 0; i < numberBtns.length; i++) {
-  numberBtns[i].addEventListener("click", (e) => {
-    pauseBlackHoleSun();
-    playSound();
-    if (!load && firstNumber.length < 10) {
-      firstNumber += e.target.value;
-      display.innerText = firstNumber;
-    } else if (load && secondNumber.length < 10) {
-      secondNumber += e.target.value;
-      display.innerText = secondNumber;
-    } else if (lastOperation && secondNumber.length < 10) {
-      secondNumber += e.target.value;
-      display.innerText = secondNumber;
-    }
+  numberBtns[i].addEventListener("click", () => {
+    numbers(i.innerText);
   });
 }
 
 const operatorBtns = document.getElementsByClassName("operatorBtns");
 for (let i = 0; i < operatorBtns.length; i++) {
-  operatorBtns[i].addEventListener("click", (e) => {
-    pauseBlackHoleSun();
-    playSound();
-    if (firstNumber === "" && secondNumber === "") {
-      return;
-    } else if (secondNumber === "") {
-      lastOperation = e.target.value;
-      load = true;
-    } else if (lastOperation) {
-      operate();
-      lastOperation = e.target.value;
-    }
+  operatorBtns[i].addEventListener("click", () => {
+    setOperation(i.innerText);
   });
 }
 
