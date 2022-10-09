@@ -77,30 +77,31 @@ function divide(x, y) {
 function operate() {
   pauseBlackHoleSun();
   playSound();
-  if (!lastOperation || !secondNumber || !firstNumber) {
-    return;
-  } else {
-    if (lastOperation === "+") {
-      add(parseFloat(firstNumber), parseFloat(secondNumber));
-      disableDecimal2 = false;
-      load = false;
-      secondNumber = "";
-    } else if (lastOperation === "-") {
-      subtract(parseFloat(firstNumber), parseFloat(secondNumber));
-      disableDecimal2 = false;
-      load = false;
-      secondNumber = "";
-    } else if (lastOperation === "*") {
-      multiply(parseFloat(firstNumber), parseFloat(secondNumber));
-      disableDecimal2 = false;
-      load = false;
-      secondNumber = "";
-    } else if (lastOperation === "/") {
-      divide(parseFloat(firstNumber), parseFloat(secondNumber));
-      disableDecimal2 = false;
-      load = false;
-      secondNumber = "";
-    }
+  if (!lastOperation || !secondNumber || !firstNumber) return;
+
+  if (lastOperation === "+") {
+    add(parseFloat(firstNumber), parseFloat(secondNumber));
+    disableDecimal2 = false;
+    load = false;
+    secondNumber = "";
+  }
+  if (lastOperation === "-") {
+    subtract(parseFloat(firstNumber), parseFloat(secondNumber));
+    disableDecimal2 = false;
+    load = false;
+    secondNumber = "";
+  }
+  if (lastOperation === "*") {
+    multiply(parseFloat(firstNumber), parseFloat(secondNumber));
+    disableDecimal2 = false;
+    load = false;
+    secondNumber = "";
+  }
+  if (lastOperation === "/") {
+    divide(parseFloat(firstNumber), parseFloat(secondNumber));
+    disableDecimal2 = false;
+    load = false;
+    secondNumber = "";
   }
 }
 
@@ -129,7 +130,8 @@ function removeLast() {
       firstNumber = firstNumber.slice(0, 10);
       display.innerText = firstNumber;
     }
-  } else if (load) {
+  }
+  if (load) {
     secondNumber = secondNumber.toString().slice(0, -1);
     if (secondNumber === "" || secondNumber === "-") {
       disableDecimal2 = false;
@@ -145,19 +147,19 @@ function removeLast() {
 function decimal() {
   pauseBlackHoleSun();
   playSound();
-  if (!firstNumber.includes(".") && firstNumber && !lastOperation) {
+  if (!firstNumber.includes(".") && firstNumber && !load) {
     firstNumber += ".";
     display.innerText = firstNumber;
   }
-  if (!firstNumber.includes(".") && !firstNumber && !lastOperation) {
+  if (!firstNumber.includes(".") && !firstNumber && !load) {
     firstNumber += "0.";
     display.innerText = firstNumber;
   }
-  if (!secondNumber.includes(".") && secondNumber && lastOperation) {
+  if (!secondNumber.includes(".") && secondNumber && load) {
     secondNumber += ".";
     display.innerText = secondNumber;
   }
-  if (!secondNumber.includes(".") && !secondNumber && lastOperation) {
+  if (!secondNumber.includes(".") && !secondNumber && load) {
     secondNumber += "0.";
     display.innerText = secondNumber;
   }
@@ -166,12 +168,12 @@ function decimal() {
 function numbers(number) {
   pauseBlackHoleSun();
   playSound();
-  if (!lastOperation && firstNumber.length < 10) {
+  if (!load && firstNumber.length < 10) {
     if (display.innerText === "0" && number === "0") return;
     firstNumber += number;
     display.innerText = firstNumber;
   }
-  if (lastOperation && secondNumber.length < 10) {
+  if (load && secondNumber.length < 10) {
     if (display.innerText === "0" && number === "0") return;
     secondNumber += number;
     display.innerText = secondNumber;
@@ -183,10 +185,14 @@ function setOperation(operation) {
   playSound();
   if (firstNumber === "" && secondNumber === "") {
     return;
-  } else if (secondNumber === "") {
+  }
+
+  if (secondNumber === "") {
     lastOperation = operation;
     load = true;
-  } else if (lastOperation) {
+  }
+
+  if (lastOperation) {
     operate();
     lastOperation = operation;
   }
@@ -232,15 +238,15 @@ window.addEventListener("keydown", handleKeyboardInput);
 
 const numberBtns = document.getElementsByClassName("nums");
 for (let i = 0; i < numberBtns.length; i++) {
-  numberBtns[i].addEventListener("click", () => {
-    numbers(i.innerText);
+  numberBtns[i].addEventListener("click", (e) => {
+    numbers(e.target.value);
   });
 }
 
 const operatorBtns = document.getElementsByClassName("operatorBtns");
 for (let i = 0; i < operatorBtns.length; i++) {
-  operatorBtns[i].addEventListener("click", () => {
-    setOperation(i.innerText);
+  operatorBtns[i].addEventListener("click", (e) => {
+    setOperation(e.target.value);
   });
 }
 
